@@ -1,0 +1,1 @@
+import {configureStore} from '@reduxjs/toolkit'; import metadata from '../features/metadata/slice'; export const store=configureStore({reducer:{metadata}}); export type RootState=ReturnType<typeof store.getState>; export type AppDispatch=typeof store.dispatch;
