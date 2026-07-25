@@ -1,0 +1,4 @@
+import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'; import {api} from '../../api/client'; import type {Metadata} from '../../types';
+export const loadMetadata=createAsyncThunk('metadata/load',async()=> (await api.get<Metadata[]>('/metadata')).data);
+export const saveMetadata=createAsyncThunk('metadata/save',async(m:Metadata)=> (await (m.id?api.put(`/metadata/${m.id}`,m):api.post('/metadata',m))).data as Metadata);
+const slice=createSlice({name:'metadata',initialState:{items:[] as Metadata[],loading:false,error:''},reducers:{},extraReducers:b=>b.addCase(loadMetadata.pending,s=>{s.loading=true}).addCase(loadMetadata.fulfilled,(s,a)=>{s.loading=false;s.items=a.payload}).addCase(loadMetadata.rejected,(s,a)=>{s.loading=false;s.error=a.error.message||'Failed'}).addCase(saveMetadata.fulfilled,(s,a)=>{const i=s.items.findIndex(x=>x.id===a.payload.id);if(i>=0)s.items[i]=a.payload;else s.items.unshift(a.payload)})}); export default slice.reducer;
