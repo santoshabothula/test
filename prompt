@@ -1,0 +1,65 @@
+
+build UI forms based on metadata - similar to SAP dynamic UI rendering pages 
+
+techstack
+- frontend: react, material ui
+- backend: python fast API 
+- database: mongodb / postgresql (suggest best database to support store metadata and dynamic form data)
+
+functionality
+- metadata UI page to collect dynamic UI page fields, actions, rules
+- create dynamic UI page based on metadata with event handling, loading options for select boxes, handle all type of html controls like input, radio, checkbox, button, selectbox, autocomplete, etc
+- create 2 routes, 1st one metadata UI page, 2nd one dynamic UI with dropdown with list of available metadata records from database 
+- connect to python from react
+- use react state management (redux toolkit)
+- create endpoints in python fast api with best practices 
+- python connects to mongodb / postgresql based on suggestion to store / retrieve metadata and store dynamic form submitted data 
+- python should follow MVC structure, dependency injection, model level validations, cross origin setup, filter to authenticate / authorize requests (for now return true)
+
+Metadata:
+- _id: string / number
+- label: string
+- description: string
+- startDate: date
+- endDate: date 
+- dataVersioning: boolean
+- metadataVersion: boolean;
+- template: UITemplate;
+- status: ENUM_Status(1 - ACTIVE, 2 - INACTIVE, 3 - HOLD, 4 - DRAFT);
+- apiVisibility: ENUM_ApiVisibility(1 - ALLOW, 2 - NOT_ALLOWED);
+- fields: Field[]
+
+UITemplate:
+- _id: string / number
+- label: string
+- description: string
+- status: ENUM_Status(1 - ACTIVE, 2 - INACTIVE, 3 - HOLD, 4 - DRAFT)
+- template: string (I want to save UI template format here either in json / yml / suggest better option)
+
+Field:
+- _id: string / number
+- label: string
+- helpText: string
+- defaultValue: string
+- datatype: ENUM_Datatype(NUMBER, STRING, DATE, TIME, DATETIME, PICKLIST, USER, TRANSLATABLE);
+- when datatype = NUMBER -> show below on UI page
+- precision: number;
+- trailingZeros: number;
+- when datatype = DATETIME, TIME -> show below on UI page
+- showSeconds: boolean;
+- when datatype = STRING -> show below on UI page
+- minLength: number;
+- maxLength: number;
+- when datatype = PICKLIST -> show below on UI page
+- picklistDatasource: Metadata
+- picklistDatasourceFiled: Metadata.Filed - show only after selection of picklistDatasource
+- picklistDatasourceFilterBy: Metadata.Filed[] (multiselect) - show only after selection of picklistDatasource
+- picklistDatsourceFormat: string; - show only after selection of picklistDatasource
+- when datatype = USER -> show below on UI page
+- includeInactiveUsers: boolean;
+- when datatype = TRANSLATABLE-> show below on UI page
+- country: Country[];
+- state: State[];
+- required: boolean;
+- showHistory: boolean;
+- maskValueOnUi: boolean;
